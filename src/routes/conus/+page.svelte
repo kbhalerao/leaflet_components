@@ -50,7 +50,14 @@
 			</GeoJson>
 		{/each}
 		{#each counties?.features as county (county.properties.FIPS)}
-			<GeoJson geojson={county} fitBounds={false} fillOpacity={0.05} color={'red'} weight="1">
+			<GeoJson
+				geojson={county}
+				fitBounds={false}
+				fillColor={'red'}
+				fillOpacity={parseInt(county.properties.CNTY_FIPS) / 200}
+				color={'red'}
+				weight="1"
+			>
 				<ToolTip sticky={true}>
 					{county.properties.NAME}
 				</ToolTip>
