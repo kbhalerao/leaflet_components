@@ -97,7 +97,7 @@
 
 	$: (async (m, loc) => {
 		if (m && geolocate && loc) {
-			let { showLocation } = await import('$lib/js/map/utils');
+			let { showLocation } = await import('./utils');
 			showLocation(coords, m, zoom);
 			if (zoomToLocation) {
 				m.flyTo([coords.latitude, coords.longitude]);
