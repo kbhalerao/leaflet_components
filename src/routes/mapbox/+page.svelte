@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import Popup from '$lib/leaflet/Popup.svelte';
 	import ToolTip from '$lib/leaflet/ToolTip.svelte';
-	import OSMTilelayer from '$lib/leaflet/OSMTilelayer.svelte';
+	import MapBoxTileLayer from '$lib/leaflet/MapBoxTileLayer.svelte';
 	import ToolTipData from '$lib/components/ToolTipData.svelte';
 	let map;
 	let usstates = {
@@ -39,7 +39,8 @@
 
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
-		<OSMTilelayer>
+		<!-- Add mapbox api key in mapboxapikey  -->
+		<MapBoxTileLayer mapboxapikey="">
 			{#each usstates?.features as feature}
 				<GeoJson
 					geojson={feature}
@@ -66,6 +67,6 @@
 					</ToolTip>
 				</GeoJson>
 			{/each}
-		</OSMTilelayer>
+		</MapBoxTileLayer>
 	</Leaflet>
 </div>
