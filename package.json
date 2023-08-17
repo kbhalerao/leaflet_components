@@ -1,6 +1,10 @@
 {
-	"name": "leaflet-components",
+	"name": "@agsci/leaflet-components",
 	"version": "0.0.1",
+	"license": "MIT",
+	"author": "Soil Diagnostics, Inc. <developer@soildiagnostics.com>",
+	"homepage": "https://github.com/kbhalerao/leaflet_components.git",
+	"bugs": "https://github.com/kbhalerao/leaflet_components/issues",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
@@ -55,3 +59,4 @@
 		"svelte-geolocation": "^0.3.0"
 	}
 }
+

@@ -1,7 +1,6 @@
 <script>
 	import { setContext } from 'svelte';
 	import { Spinner } from 'spin.js';
-	import { browser } from '$app/environment';
 	import Geolocation from 'svelte-geolocation';
 	import { add_basetilelayers } from './basetileset_helpers.js';
 
@@ -110,7 +109,7 @@
 	{#if map}
 		<slot {map} />
 	{/if}
-	{#if geolocate && browser}
+	{#if geolocate}
 		<Geolocation
 			watch={true}
 			getPosition={true}
