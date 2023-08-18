@@ -6,6 +6,8 @@
 	import ToolTip from '$lib/leaflet/ToolTip.svelte';
 	import OSMTilelayer from '$lib/leaflet/OSMTilelayer.svelte';
 	import ToolTipData from '$lib/components/ToolTipData.svelte';
+	import Control from '$lib/leaflet/Control.svelte';
+	import MapBoxTileLayer from '$lib/leaflet/MapBoxTileLayer.svelte';
 	let map;
 	let usstates = {
 		features: []
@@ -39,33 +41,33 @@
 
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
-		<OSMTilelayer>
-			{#each usstates?.features as feature}
-				<GeoJson
-					geojson={feature}
-					fitBounds={false}
-					fillOpacity={parseInt(feature.properties.STATE) / 100}
-					on:click={stateClick}
-				>
-					<ToolTip sticky={true}>
-						<ToolTipData />
-					</ToolTip>
-				</GeoJson>
-			{/each}
-			{#each counties?.features as county (county.properties.FIPS)}
-				<GeoJson
-					geojson={county}
-					fitBounds={false}
-					fillColor={'red'}
-					fillOpacity={parseInt(county.properties.CNTY_FIPS) / 200}
-					color={'red'}
-					weight="1"
-				>
-					<ToolTip sticky={true}>
-						<ToolTipData />
-					</ToolTip>
-				</GeoJson>
-			{/each}
-		</OSMTilelayer>
+		<OSMTilelayer />
+		<MapBoxTileLayer mapboxapikey="" />
+		{#each usstates?.features as feature}
+			<GeoJson
+				geojson={feature}
+				fitBounds={false}
+				fillOpacity={parseInt(feature.properties.STATE) / 100}
+				on:click={stateClick}
+			>
+				<ToolTip sticky={true}>
+					<ToolTipData />
+				</ToolTip>
+			</GeoJson>
+		{/each}
+		{#each counties?.features as county (county.properties.FIPS)}
+			<GeoJson
+				geojson={county}
+				fitBounds={false}
+				fillColor={'red'}
+				fillOpacity={parseInt(county.properties.CNTY_FIPS) / 200}
+				color={'red'}
+				weight="1"
+			>
+				<ToolTip sticky={true}>
+					<ToolTipData />
+				</ToolTip>
+			</GeoJson>
+		{/each}
 	</Leaflet>
 </div>
