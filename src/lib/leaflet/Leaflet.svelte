@@ -15,6 +15,7 @@
 	export let mapbusy = false;
 	export let geolocate = false;
 	export let zoomToLocation = false;
+	export let showTileLayerControl = true;
 
 	let mapProp = undefined;
 	export { mapProp as map };
@@ -25,6 +26,7 @@
 	 * @type {{ invalidateSize: any; fitBounds: any; setView: any; remove: any; } | undefined}
 	 */
 	let map;
+	let layerControl;
 	$: mapProp = map;
 
 	/**
@@ -37,9 +39,13 @@
 	let coords;
 
 	export const getMap = () => map;
+
+	export const getLayerControl = () => layerControl;
+
 	setContext('layerGroup', getMap);
 	setContext('layer', getMap);
 	setContext('map', getMap);
+	setContext('layerControl', getLayerControl);
 
 	/**
 	 * @param {{ detail: { coords: any; }; }} loc
@@ -68,6 +74,11 @@
 			map.setView(view, zoom);
 		}
 		// add_basetilelayers({ osm: null }, map);
+		if (showTileLayerControl) {
+			layerControl = L.control.layers().addTo(map);
+		}
+
+		// layerControl.remove(map);
 
 		spinner = new Spinner().spin(node);
 		return {

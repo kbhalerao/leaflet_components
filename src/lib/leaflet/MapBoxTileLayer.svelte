@@ -20,10 +20,12 @@
 		}
 	};
 	const map = getContext('map')();
+	const layerControl = getContext('layerControl')();
 
 	const addTileLayer = async () => {
 		let L = await import('leaflet');
-		L.tileLayer(tile_data.value.uri, tile_data.value.options).addTo(map);
+		let mapboxTile = L.tileLayer(tile_data.value.uri, tile_data.value.options).addTo(map);
+		layerControl?.addBaseLayer(mapboxTile, 'mapbox');
 	};
 </script>
 

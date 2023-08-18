@@ -1,6 +1,5 @@
 <script>
 	import { getContext } from 'svelte';
-	import { map_tiles } from './base_tilesets.js';
 
 	const tile_data = {
 		name: 'osm',
@@ -15,9 +14,11 @@
 		}
 	};
 	const map = getContext('map')();
+	const layerControl = getContext('layerControl')();
 	const addTileLayer = async () => {
 		let L = await import('leaflet');
-		L.tileLayer(tile_data.value.uri, tile_data.value.options).addTo(map);
+		let osmTile = L.tileLayer(tile_data.value.uri, tile_data.value.options).addTo(map);
+		layerControl?.addBaseLayer(osmTile, 'osm');
 	};
 </script>
 
