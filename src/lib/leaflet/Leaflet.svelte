@@ -67,7 +67,7 @@
 		} else {
 			map.setView(view, zoom);
 		}
-		add_basetilelayers({ osm: null }, map);
+		// add_basetilelayers({ osm: null }, map);
 
 		spinner = new Spinner().spin(node);
 		return {
