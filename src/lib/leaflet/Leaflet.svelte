@@ -130,6 +130,7 @@
 	{/if}
 </div>
 
+
 <style>
 	@import 'leaflet/dist/leaflet.css';
 	@import 'spin.js/spin.css';

@@ -23,7 +23,7 @@
 	 * @param {HTMLDivElement} container
 	 */
 	async function createControl(container) {
-		import('../js/map/utils.js').then(({ Control }) => {
+		import('./utils.js').then(({ Control }) => {
 			control = new Control(container, position).addTo(map);
 			return {
 				destroy() {
