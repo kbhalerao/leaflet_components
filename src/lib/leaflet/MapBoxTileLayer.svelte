@@ -2,6 +2,7 @@
 	import { getContext } from 'svelte';
 
 	export let mapboxapikey = '';
+	export let mapboxStyleID = 'mapbox/satellite-streets-v9';
 
 	const tile_data = {
 		name: 'mapbox',
@@ -11,7 +12,7 @@
 			options: {
 				attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
-				id: 'mapbox/satellite-streets-v9', // replace with your preferred Mapbox style ID
+				id: mapboxStyleID, // replace with your preferred Mapbox style ID
 				tileSize: 512,
 				zoomOffset: -1,
 				accessToken: mapboxapikey,
