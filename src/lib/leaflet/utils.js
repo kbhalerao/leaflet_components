@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import { geolocationPulsatingCircle } from './stores';
 import { get } from 'svelte/store';
-import { center } from '@turf/turf';
+import { center, circle } from '@turf/turf';
 
 export class Control extends L.Control {
 	/**
@@ -107,8 +107,10 @@ export async function setUpMapForEditEvents(farmFeatureGroup, map) {
 	map.off('pm:create');
 	map.on(
 		'pm:create',
+
 		(/** @type {{ layer: import("leaflet").Circle<any>; shape: string; type: any; }} */ e) => {
 			let createdLayer = e.layer;
+			console.log('Inside create');
 			// on create add the newly created layer to the boundary_layer feature group.
 			// Make sure this is always a Polygon feature
 			if (e.shape === 'Circle') {

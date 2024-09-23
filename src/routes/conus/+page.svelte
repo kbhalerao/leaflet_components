@@ -10,7 +10,7 @@
 	import MapBoxTileLayer from '$lib/leaflet/MapBoxTileLayer.svelte';
 	import FeatureGroup from '$lib/leaflet/FeatureGroup.svelte';
 	import PopupData from '$lib/leaflet/PopupData.svelte';
-	import ListenEdits from '$lib/leaflet/ListenEdits.svelte';
+	import ListenEdits from '$lib/leaflet/ListenLayerEdits.svelte';
 	let map;
 	let usstates = {
 		features: []
