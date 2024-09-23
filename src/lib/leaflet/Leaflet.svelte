@@ -66,6 +66,8 @@
 	 */
 	async function createLeaflet(node) {
 		let L = await import('leaflet');
+		await import('@geoman-io/leaflet-geoman-free');
+
 		map = L.map(node, {
 			attributionControl: false
 		});

@@ -8,6 +8,9 @@
 	import ToolTipData from '$lib/components/ToolTipData.svelte';
 	import Control from '$lib/leaflet/Control.svelte';
 	import MapBoxTileLayer from '$lib/leaflet/MapBoxTileLayer.svelte';
+	import FeatureGroup from '$lib/leaflet/FeatureGroup.svelte';
+	import PopupData from '$lib/leaflet/PopupData.svelte';
+	import ListenEdits from '$lib/leaflet/ListenEdits.svelte';
 	let map;
 	let usstates = {
 		features: []
@@ -22,6 +25,9 @@
 
 	let counties;
 
+	let nationalFeatureGroup;
+	let stateFeatureGroup;
+	let addToFeatureGroup=true;
 	async function getCounties(state) {
 		if (state) {
 			counties = await fetch(`/geojsons/${state}.json`).then((r) => r.json());
@@ -37,10 +43,22 @@
 	onMount(async () => {
 		usstates = await fetch('/geojsons/gz_2010_us_040_00_500k.json?url').then((r) => r.json());
 	});
+
+	 function on_layer_edit(e){
+		// let layer = e.detail;
+		const {layer,type,...rest} = e.detail;
+		if(layer){
+			console.log("The layer",layer?.toGeoJSON(),type)
+		}
+		
+	}
+
+	
 </script>
 
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
+		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
 		<OSMTilelayer />
 		<MapBoxTileLayer mapboxapikey="" />
 		{#each usstates?.features as feature}
@@ -48,13 +66,22 @@
 				geojson={feature}
 				fitBounds={false}
 				fillOpacity={parseInt(feature.properties.STATE) / 100}
-				on:click={stateClick}
+				on:click={()=>{}}
+				addToFeatureGroup={addToFeatureGroup}
 			>
-				<ToolTip sticky={true}>
+				<!-- <ToolTip sticky={true}>
 					<ToolTipData />
-				</ToolTip>
+				</ToolTip> -->
+				<ListenEdits on:pm:edit={on_layer_edit}></ListenEdits>
+				<Popup>
+					<PopupData >
+
+					</PopupData>
+				</Popup>
 			</GeoJson>
 		{/each}
+		</FeatureGroup>
+		<FeatureGroup bind:featureGroup={stateFeatureGroup}>
 		{#each counties?.features as county (county.properties.FIPS)}
 			<GeoJson
 				geojson={county}
@@ -63,11 +90,17 @@
 				fillOpacity={parseInt(county.properties.CNTY_FIPS) / 200}
 				color={'red'}
 				weight="1"
+				addToFeatureGroup={addToFeatureGroup}
+				
 			>
 				<ToolTip sticky={true}>
 					<ToolTipData />
 				</ToolTip>
 			</GeoJson>
 		{/each}
+	</FeatureGroup>
+	<Control position="topright">
+		<button class="btn btn-sm btn-primary" type="button">save</button>
+	</Control>
 	</Leaflet>
 </div>

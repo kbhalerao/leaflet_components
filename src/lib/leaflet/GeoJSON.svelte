@@ -11,8 +11,14 @@
 	export let fillOpacity = 0.6;
 	export let weight = 2;
 	export let fitBounds = true;
+	export let addToFeatureGroup = false;
 
 	const container = getContext('layerGroup')();
+	const featureGroup = getContext('featureGroup')();
+
+	const layerContainer = addToFeatureGroup && featureGroup ? featureGroup : container;
+
+
 	let layerPane = pane || getContext('pane');
 	// @ts-ignore
 	export let layer;
@@ -21,13 +27,13 @@
 		.on('mouseover', (/** @type {any} */ e) => dispatch('mouseover', e))
 		.on('mouseout', (/** @type {any} */ e) => dispatch('mouseout', e))
 		.on('click', (/** @type {any} */ e) => dispatch('click', e))
-		.addTo(container);
+		.addTo(layerContainer);
 
 	let layerBounds;
 	layerBounds = layer.getBounds();
 
 	if (fitBounds && layerBounds) {
-		container.fitBounds(layerBounds);
+		layerContainer.fitBounds(layerBounds);
 	}
 
 	setContext('layer', () => layer);

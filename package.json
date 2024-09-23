@@ -49,6 +49,8 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
+		"@geoman-io/leaflet-geoman-free": "^2.17.0",
+		"@turf/turf": "^7.1.0",
 		"just-flush": "^2.3.0",
 		"leaflet-spin": "^1.1.2",
 		"spin.js": "^4.1.1",
