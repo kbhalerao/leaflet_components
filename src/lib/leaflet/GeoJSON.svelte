@@ -12,11 +12,12 @@
 	export let weight = 2;
 	export let fitBounds = true;
 	export let addToFeatureGroup = false;
+	export let fitFeatureGroup = false;
 
 	const container = getContext('layerGroup')();
 	const featureGroup = getContext('featureGroup')();
 
-	const layerContainer = addToFeatureGroup && featureGroup ? featureGroup : container;
+	const addLayerTo = addToFeatureGroup && featureGroup ? featureGroup : container;
 
 	let layerPane = pane || getContext('pane');
 	// @ts-ignore
@@ -26,13 +27,13 @@
 		.on('mouseover', (/** @type {any} */ e) => dispatch('mouseover', e))
 		.on('mouseout', (/** @type {any} */ e) => dispatch('mouseout', e))
 		.on('click', (/** @type {any} */ e) => dispatch('click', e))
-		.addTo(layerContainer);
+		.addTo(addLayerTo);
 
 	let bounds;
-	bounds = layer.getBounds();
+	bounds = fitFeatureGroup ? featureGroup?.getBounds() : layer.getBounds();
 
 	if (fitBounds && bounds) {
-		layerContainer.fitBounds(bounds);
+		container.fitBounds(bounds);
 	}
 
 	setContext('layer', () => layer);

@@ -1,6 +1,6 @@
 <script>
 	import { createEventDispatcher, getContext, onMount } from 'svelte';
-	const dispatch =createEventDispatcher()
+	const dispatch = createEventDispatcher();
 
 	let popup = getContext('popup')();
 	const layer = getContext('layer')();
@@ -11,32 +11,30 @@
 
 	let layerEditEnabled = false;
 
-	let enabledEdit={
-	draggable: true,
-	allowCutting: true,
-	allowRemoval: true,
-	allowRotation: true,
-	allowEditing: true
-   }
+	let enabledEdit = {
+		draggable: true,
+		allowCutting: true,
+		allowRemoval: true,
+		allowRotation: true,
+		allowEditing: true
+	};
 
-	let disableEdit={
+	let disableEdit = {
 		draggable: false,
 		allowCutting: false,
 		allowRemoval: false,
 		allowRotation: false,
 		allowEditing: false
-	}
-	const enableEdit = ()=>{
-		layerEditEnabled = layer.pm.enabled()
-		if(layerEditEnabled){
-			layer.pm.enable(disableEdit)
-		}else{
-			layer.pm.enable(enabledEdit)
+	};
+	const enableEdit = () => {
+		layerEditEnabled = layer.pm.enabled();
+		if (layerEditEnabled) {
+			layer.pm.enable(disableEdit);
+		} else {
+			layer.pm.enable(enabledEdit);
 		}
-		popup.close()
-	}	
-
-	
+		popup.close();
+	};
 </script>
 
 <div class="popup">

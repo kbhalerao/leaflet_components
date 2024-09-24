@@ -110,7 +110,6 @@ export async function setUpMapForEditEvents(farmFeatureGroup, map) {
 
 		(/** @type {{ layer: import("leaflet").Circle<any>; shape: string; type: any; }} */ e) => {
 			let createdLayer = e.layer;
-			console.log('Inside create');
 			// on create add the newly created layer to the boundary_layer feature group.
 			// Make sure this is always a Polygon feature
 			if (e.shape === 'Circle') {
@@ -129,7 +128,9 @@ export async function setUpMapForEditEvents(farmFeatureGroup, map) {
 			} else {
 				console.warn("Don't know how to handle this shape", { e });
 			}
-			farmFeatureGroup.addLayer(createdLayer);
+			console.log('The created layer', createdLayer, farmFeatureGroup?.toGeoJSON());
+			createdLayer.addTo(farmFeatureGroup);
+			// farmFeatureGroup.addLayer(createdLayer);
 		}
 	);
 }
