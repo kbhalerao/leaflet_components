@@ -18,7 +18,6 @@
 
 	const layerContainer = addToFeatureGroup && featureGroup ? featureGroup : container;
 
-
 	let layerPane = pane || getContext('pane');
 	// @ts-ignore
 	export let layer;
@@ -29,11 +28,11 @@
 		.on('click', (/** @type {any} */ e) => dispatch('click', e))
 		.addTo(layerContainer);
 
-	let layerBounds;
-	layerBounds = layer.getBounds();
+	let bounds;
+	bounds = layer.getBounds();
 
-	if (fitBounds && layerBounds) {
-		layerContainer.fitBounds(layerBounds);
+	if (fitBounds && bounds) {
+		layerContainer.fitBounds(bounds);
 	}
 
 	setContext('layer', () => layer);
