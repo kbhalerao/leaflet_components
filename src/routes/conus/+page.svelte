@@ -87,6 +87,7 @@
 					on:click={() => {}}
 					{addToFeatureGroup}
 					fitFeatureGroup={false}
+					addPattern={false}
 				>
 					<!-- <ToolTip sticky={true}>
 					<ToolTipData />

@@ -13,6 +13,8 @@
 	export let fitBounds = true;
 	export let addToFeatureGroup = false;
 	export let fitFeatureGroup = false;
+	export let addPattern = false;
+	export let patternUrl = 'url(#angledCrossLines)';
 
 	const container = getContext('layerGroup')();
 	const featureGroup = getContext('featureGroup')();
@@ -42,8 +44,21 @@
 		layer.remove();
 	});
 
+	if (addPattern) {
+		fillColor = patternUrl;
+	}
 	let layerStyle = flush({ color, fillColor, fillOpacity, weight });
 	layer.setStyle(layerStyle);
 </script>
 
 <slot />
+
+<!-- SVG pattern definition with id -->
+<svg style="height: 0; width: 0; position: absolute;">
+	<defs>
+		<pattern id="angledCrossLines" patternUnits="userSpaceOnUse" width="20" height="20">
+			<path d="M0,20 L20,0" stroke="red" stroke-width="2" />
+			<path d="M0,0 L20,20" stroke="yellow" stroke-width="2" />
+		</pattern>
+	</defs>
+</svg>
