@@ -13,6 +13,8 @@
 	import ListenEdits from '$lib/leaflet/ListenLayerEdits.svelte';
 	import { difference, featureCollection } from '@turf/turf';
 	import Geoman from '$lib/leaflet/Geoman.svelte';
+	import { PUBLIC_MAPBOX_API_KEY } from '$env/static/public';
+
 	let map;
 	let usstates = {
 		features: []
@@ -76,9 +78,9 @@
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
 		<Geoman />
+		<OSMTilelayer />
+		<MapBoxTileLayer mapboxapikey={PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
-			<OSMTilelayer />
-			<MapBoxTileLayer mapboxapikey="" />
 			{#each usstates?.features?.slice(0, 20) as feature}
 				<GeoJson
 					geojson={feature}
