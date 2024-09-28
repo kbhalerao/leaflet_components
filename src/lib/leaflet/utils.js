@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import { geolocationPulsatingCircle } from './stores';
 import { get } from 'svelte/store';
+import { center, circle } from '@turf/turf';
 
 export class Control extends L.Control {
 	/**
@@ -55,3 +56,81 @@ export const generatePulsatingMarker = (radius, color) => {
 		className: ''
 	});
 };
+
+export const getCirclePolygon = (
+	/** @type {{ layer: { toGeoJSON: () => import("@turf/helpers").AllGeoJSON; options: { radius: any; }; }; }} */ e
+) => {
+	let centerOfCircle = center(e.layer.toGeoJSON());
+	let centerCoordinates = centerOfCircle.geometry.coordinates;
+	let radius = e.layer.options.radius;
+	let options = { steps: 64, units: 'meters', properties: { drawnCircle: true } };
+
+	return circle(centerCoordinates, radius, options);
+};
+
+export function add_map_boundary_draw_controls(map, geomanControls, position) {
+	map?.pm?.removeControls();
+	map?.pm?.addControls({
+		position: position,
+		drawRectangle: false,
+		drawMarker: false,
+		drawPolyline: false,
+		drawText: false,
+		drawCircleMarker: false,
+		drawCircle: false,
+		...geomanControls
+	});
+	map?.pm?.Toolbar.changeControlOrder([
+		'drawPolygon',
+		'drawCircle',
+		'dragMode',
+		'cutPolygon',
+		'removalMode',
+		'rotateMode',
+		'pickPolygons',
+		'editMode'
+	]);
+}
+/**
+ * @param {{ addLayer: (arg0: import("leaflet").Circle<any>) => void; }} farmFeatureGroup
+ * @param {{ off: (arg0: string) => void; on: (arg0: string, arg1: (e: { layer: import("leaflet").Circle<any>; shape: string; type: any; }) => void) => void; removeLayer: (arg0: import("leaflet").Circle<any>) => void; }} map
+ */
+export async function setUpMapForEditEvents(farmFeatureGroup, map) {
+	// set drawing style here
+	let L = await import('leaflet');
+	if (!L.PM) {
+		await import('@geoman-io/leaflet-geoman-free');
+		console.debug('Reinit 1 L.PM');
+		// L.PM.reInitLayer(map);
+	}
+
+	map.off('pm:create');
+	map.on(
+		'pm:create',
+
+		(/** @type {{ layer: import("leaflet").Circle<any>; shape: string; type: any; }} */ e) => {
+			let createdLayer = e.layer;
+			// on create add the newly created layer to the boundary_layer feature group.
+			// Make sure this is always a Polygon feature
+			if (e.shape === 'Circle') {
+				// createdLayer = L.PM.Utils.circleToPolygon(e.layer);
+				let circlePolygon = getCirclePolygon(e);
+				createdLayer = L.geoJSON(circlePolygon);
+
+				map.removeLayer(e.layer);
+			} else if (
+				e.shape === 'Polygon' ||
+				e.shape === 'Rectangle' ||
+				e.shape === 'Line' ||
+				e.shape === 'Marker'
+			) {
+				createdLayer = e.layer;
+			} else {
+				console.warn("Don't know how to handle this shape", { e });
+			}
+			console.log('The created layer', createdLayer, farmFeatureGroup?.toGeoJSON());
+			createdLayer.addTo(farmFeatureGroup);
+			// farmFeatureGroup.addLayer(createdLayer);
+		}
+	);
+}

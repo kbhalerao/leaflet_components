@@ -11,8 +11,16 @@
 	export let fillOpacity = 0.6;
 	export let weight = 2;
 	export let fitBounds = true;
+	export let addToFeatureGroup = false;
+	export let fitFeatureGroup = false;
+	export let addPattern = false;
+	export let patternUrl = 'url(#angledCrossLines)';
 
 	const container = getContext('layerGroup')();
+	const featureGroup = getContext('featureGroup')();
+
+	const addLayerTo = addToFeatureGroup && featureGroup ? featureGroup : container;
+
 	let layerPane = pane || getContext('pane');
 	// @ts-ignore
 	export let layer;
@@ -21,13 +29,13 @@
 		.on('mouseover', (/** @type {any} */ e) => dispatch('mouseover', e))
 		.on('mouseout', (/** @type {any} */ e) => dispatch('mouseout', e))
 		.on('click', (/** @type {any} */ e) => dispatch('click', e))
-		.addTo(container);
+		.addTo(addLayerTo);
 
-	let layerBounds;
-	layerBounds = layer.getBounds();
+	let bounds;
+	bounds = fitFeatureGroup ? featureGroup?.getBounds() : layer.getBounds();
 
-	if (fitBounds && layerBounds) {
-		container.fitBounds(layerBounds);
+	if (fitBounds && bounds) {
+		container.fitBounds(bounds);
 	}
 
 	setContext('layer', () => layer);
@@ -36,8 +44,21 @@
 		layer.remove();
 	});
 
+	if (addPattern) {
+		fillColor = patternUrl;
+	}
 	let layerStyle = flush({ color, fillColor, fillOpacity, weight });
 	layer.setStyle(layerStyle);
 </script>
 
 <slot />
+
+<!-- SVG pattern definition with id -->
+<svg style="height: 0; width: 0; position: absolute;">
+	<defs>
+		<pattern id="angledCrossLines" patternUnits="userSpaceOnUse" width="20" height="20">
+			<path d="M0,20 L20,0" stroke="red" stroke-width="2" />
+			<path d="M0,0 L20,20" stroke="yellow" stroke-width="2" />
+		</pattern>
+	</defs>
+</svg>

@@ -6,6 +6,8 @@
 	import ToolTip from '$lib/leaflet/ToolTip.svelte';
 	import MapBoxTileLayer from '$lib/leaflet/MapBoxTileLayer.svelte';
 	import ToolTipData from '$lib/components/ToolTipData.svelte';
+	import { PUBLIC_MAPBOX_API_KEY } from '$env/static/public';
+
 	let map;
 	let usstates = {
 		features: []
@@ -40,7 +42,7 @@
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
 		<!-- Add mapbox api key in mapboxapikey  -->
-		<MapBoxTileLayer mapboxapikey="" />
+		<MapBoxTileLayer mapboxapikey={PUBLIC_MAPBOX_API_KEY} />
 		{#each usstates?.features as feature}
 			<GeoJson
 				geojson={feature}
