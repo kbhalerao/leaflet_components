@@ -59,6 +59,7 @@
 		"just-flush": "^2.3.0",
 		"leaflet": "^1.9.4",
 		"leaflet-spin": "^1.1.2",
+		"leaflet.gridlayer.googlemutant": "^0.14.1",
 		"spin.js": "^4.1.1",
 		"svelte-geolocation": "^0.3.0"
 	}
