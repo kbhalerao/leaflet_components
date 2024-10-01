@@ -1,8 +1,8 @@
 <script>
 	import { getContext } from 'svelte';
 	import { tileLayers } from './stores.js';
-	import { PUBLIC_MAPBOX_API_KEY } from '$env/static/public';
 
+	export let mapbox_api_key = '';
 	export let defaultTile = false;
 	export let mapboxStyleID = 'mapbox/satellite-streets-v9';
 
@@ -10,14 +10,14 @@
 		name: 'mapbox',
 		representation: 'MapBox',
 		value: {
-			uri: `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${PUBLIC_MAPBOX_API_KEY}`,
+			uri: `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapbox_api_key}`,
 			options: {
 				attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
 				maxZoom: 18,
 				id: mapboxStyleID, // replace with your preferred Mapbox style ID
 				tileSize: 512,
 				zoomOffset: -1,
-				accessToken: PUBLIC_MAPBOX_API_KEY,
+				accessToken: mapbox_api_key,
 				pmIgnore: true
 			}
 		}

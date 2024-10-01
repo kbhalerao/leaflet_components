@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 
@@ -12,4 +12,4 @@
 			// GeoJSON = components.GeoJSON;
 		}
 	});
-</script>
+</script> -->

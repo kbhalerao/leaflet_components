@@ -11,7 +11,6 @@
 	import ListenEdits from '$lib/leaflet/ListenLayerEdits.svelte';
 	import { difference, featureCollection } from '@turf/turf';
 	import Geoman from '$lib/leaflet/Geoman.svelte';
-	import { PUBLIC_MAPBOX_API_KEY } from '$env/static/public';
 	import MapTiles from '$lib/leaflet/MapTiles.svelte';
 
 	let map;
@@ -29,6 +28,8 @@
 	};
 
 	let defaultTile = 'usgs';
+
+	let PUBLIC_MAPBOX_API_KEY = '';
 
 	function stateClick(e) {
 		map.fitBounds(e.detail.layer.getBounds());
@@ -88,7 +89,7 @@
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
 		<Geoman />
-		<MapTiles {mapTileList} {defaultTile} />
+		<MapTiles {mapTileList} {defaultTile} {PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
 			{#each usstates?.features?.slice(0, 20) as feature}
 				<GeoJson
@@ -98,7 +99,8 @@
 					on:click={() => {}}
 					{addToFeatureGroup}
 					fitFeatureGroup={false}
-					addPattern={false}
+					addFillPattern={false}
+					addStrokePattern={true}
 				>
 					<!-- <ToolTip sticky={true}>
 					<ToolTipData />
