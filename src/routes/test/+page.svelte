@@ -1,9 +1,14 @@
-<!-- <script>
-	import MapComponents from '$lib/components/MapComponents.svelte';
-	let Leaflet;
+<script>
+	import { Leaflet, OSMTilelayer } from '@agsci/leaflet-components';
+
 	let map;
 </script>
 
-<MapComponents bind:Leaflet />
-<span>Hello</span>
-<svelte:component this={Leaflet} bind:map height="600px" /> -->
+<Leaflet bind:map height="600px">
+	<OSMTilelayer />
+</Leaflet>
+
+<style lang="vite_preprocess_ignore">
+	@import 'leaflet/dist/leaflet.css';
+	@import 'spin.js/spin.css';
+</style>
