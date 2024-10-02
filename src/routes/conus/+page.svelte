@@ -4,21 +4,45 @@
 	import { onMount } from 'svelte';
 	import Popup from '$lib/leaflet/Popup.svelte';
 	import ToolTip from '$lib/leaflet/ToolTip.svelte';
-	import OSMTilelayer from '$lib/leaflet/OSMTilelayer.svelte';
 	import ToolTipData from '$lib/components/ToolTipData.svelte';
 	import Control from '$lib/leaflet/Control.svelte';
-	import MapBoxTileLayer from '$lib/leaflet/MapBoxTileLayer.svelte';
 	import FeatureGroup from '$lib/leaflet/FeatureGroup.svelte';
 	import PopupData from '$lib/leaflet/PopupData.svelte';
 	import ListenEdits from '$lib/leaflet/ListenLayerEdits.svelte';
 	import { difference, featureCollection } from '@turf/turf';
 	import Geoman from '$lib/leaflet/Geoman.svelte';
-	import { PUBLIC_MAPBOX_API_KEY } from '$env/static/public';
+	import MapTiles from '$lib/leaflet/MapTiles.svelte';
 
 	let map;
 	let usstates = {
 		features: []
 	};
+
+	let mapTileList = {
+		google: false,
+		mapbox: false,
+		osm: true,
+		esri: true,
+		naip: true,
+		usgs: true
+	};
+
+	let defaultTile = 'usgs';
+
+	let geomanControls = {
+		drawMarker: true,
+		drawPolyline: false,
+		drawCircle: true,
+		dragMode: true,
+		drawPolygon: true,
+		cutPolygon: true,
+		removalMode: true,
+		rotateMode: false,
+		pickPolygons: true,
+		editMode: true
+	};
+
+	let PUBLIC_MAPBOX_API_KEY = '';
 
 	function stateClick(e) {
 		map.fitBounds(e.detail.layer.getBounds());
@@ -77,9 +101,8 @@
 
 <div class="conus">
 	<Leaflet bind:map height={'600px'}>
-		<Geoman />
-		<OSMTilelayer />
-		<MapBoxTileLayer mapboxapikey={PUBLIC_MAPBOX_API_KEY} />
+		<Geoman {geomanControls} />
+		<MapTiles {mapTileList} {defaultTile} {PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
 			{#each usstates?.features?.slice(0, 20) as feature}
 				<GeoJson
@@ -89,7 +112,8 @@
 					on:click={() => {}}
 					{addToFeatureGroup}
 					fitFeatureGroup={false}
-					addPattern={false}
+					addFillPattern={false}
+					addStrokePattern={true}
 				>
 					<!-- <ToolTip sticky={true}>
 					<ToolTipData />

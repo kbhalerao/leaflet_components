@@ -13,8 +13,10 @@
 	export let fitBounds = true;
 	export let addToFeatureGroup = false;
 	export let fitFeatureGroup = false;
-	export let addPattern = false;
+	export let addFillPattern = false;
+	export let addStrokePattern = false;
 	export let patternUrl = 'url(#angledCrossLines)';
+	export let strokePatternUrl = 'url(#stroke)';
 
 	const container = getContext('layerGroup')();
 	const featureGroup = getContext('featureGroup')();
@@ -44,8 +46,11 @@
 		layer.remove();
 	});
 
-	if (addPattern) {
+	if (addFillPattern) {
 		fillColor = patternUrl;
+	}
+	if (addStrokePattern) {
+		color = patternUrl;
 	}
 	let layerStyle = flush({ color, fillColor, fillOpacity, weight });
 	layer.setStyle(layerStyle);
