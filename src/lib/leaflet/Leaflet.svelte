@@ -1,33 +1,27 @@
-<script>
+<script lang="ts">
 	import { setContext } from 'svelte';
 	import { Spinner } from 'spin.js';
 	import Geolocation from 'svelte-geolocation';
-	import { add_basetilelayers } from './basetileset_helpers.js';
 
-	export let height = '300px';
-	// Must set either bounds, or view and zoom.
-	/**
-	 * @type {undefined}
-	 */
-	export let bounds = undefined;
-	export let view = [39.8283, -98.5795];
-	export let zoom = 4;
-	export let mapbusy = false;
-	export let geolocate = false;
-	export let zoomToLocation = false;
-	export let showTileLayerControl = true;
+	// Destructuring props with defaults
+	let {
+		height = '300px',
+		bounds = undefined,
+		view = [39.8283, -98.5795],
+		zoom = 4,
+		mapbusy = false,
+		geolocate = false,
+		zoomToLocation = false,
+		showTileLayerControl = true,
+		map = $bindable(),
+	}:{height:string;bounds:any,view:number[];zoom:number;mapbusy:boolean;geolocate:boolean,zoomToLocation:boolean,showTileLayerControl:boolean;map:any} = $props();
 
-	let mapProp = undefined;
-	export { mapProp as map };
+	
 
 	export const invalidateSize = () => map?.invalidateSize();
 
-	/**
-	 * @type {{ invalidateSize: any; fitBounds: any; setView: any; remove: any; } | undefined}
-	 */
-	let map;
+	
 	let layerControl;
-	$: mapProp = map;
 
 	/**
 	 * @type {Spinner}
@@ -36,7 +30,7 @@
 	/**
 	 * @type {any}
 	 */
-	let coords;
+	let coords = $state();
 
 	export const getMap = () => map;
 
@@ -75,12 +69,10 @@
 		} else {
 			map.setView(view, zoom);
 		}
-		// add_basetilelayers({ osm: null }, map);
 		if (showTileLayerControl) {
 			layerControl = L.control.layers().addTo(map);
 		}
 
-		// layerControl.remove(map);
 
 		spinner = new Spinner().spin(node);
 		return {
@@ -91,31 +83,39 @@
 		};
 	}
 
-	$: if (map) {
+	$effect(()=>{
+		if (map) {
 		if (bounds) {
 			map.fitBounds(bounds);
 		} else {
 			map.setView(view, zoom);
 		}
 	}
+	}) 
 
-	$: if (map && spinner) {
+	$effect(()=>{
+		if (map && spinner) {
 		if (mapbusy) {
 			spinner.spin();
 		} else {
 			spinner.stop();
 		}
 	}
+	})
 
-	$: (async (m, loc) => {
-		if (m && geolocate && loc) {
+	
+
+	
+
+	$effect(async()=>{
+		if (map && geolocate && coords) {
 			let { showLocation } = await import('./utils');
-			showLocation(coords, m, zoom);
+			showLocation(coords, map, zoom);
 			if (zoomToLocation) {
-				m.flyTo([coords.latitude, coords.longitude]);
+				map.flyTo([coords.latitude, coords.longitude]);
 			}
 		}
-	})(map, coords);
+	})
 </script>
 
 <div style="height: {height};" use:createLeaflet>
