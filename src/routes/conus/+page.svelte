@@ -103,6 +103,16 @@
 		console.log('The national features', nationalFeatureGroup.toGeoJSON());
 		console.log('The state features', stateFeatureGroup.toGeoJSON());
 	}
+
+	const onClickLayer = (e)=>{
+		// console.log("The layer clicked",e)
+	}
+	const onMouseOut = (e)=>{
+		// console.log("OnMouseOut",e)
+	}
+	const onMouseOver = (e)=>{
+		// console.log("OnMouseOver",e)
+	}
 </script>
 
 <div class="conus">
@@ -115,7 +125,9 @@
 					geojson={feature}
 					fitBounds={true}
 					fillOpacity={parseInt(feature.properties.STATE) / 100}
-					on:click={() => {}}
+					{onClickLayer}
+					{onMouseOver}
+					{onMouseOut}
 					{addToFeatureGroup}
 					fitFeatureGroup={false}
 					addFillPattern={false}

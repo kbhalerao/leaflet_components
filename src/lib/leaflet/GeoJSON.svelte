@@ -1,34 +1,40 @@
 <script>
 	import flush from 'just-flush';
-	import { getContext, setContext, onDestroy, createEventDispatcher } from 'svelte';
+	import { getContext, setContext, onDestroy } from 'svelte';
 	import { getFeatureGroupsBounds } from './helpers.js';
 
-	const dispatch = createEventDispatcher();
-
-	export let geojson;
-	export let color = 'blue';
-	export let pane = undefined;
-	export let fillColor = 'blue';
-	export let fillOpacity = 0.6;
-	export let weight = 2;
-	export let fitBounds = true;
-	export let addToFeatureGroup = false;
-	export let fitFeatureGroup = false;
-	export let featureGroups = [];
-	export let addFillPattern = false;
-	export let addStrokePattern = false;
-	export let patternUrl = 'url(#angledCrossLines)';
-	export let strokePatternUrl = 'url(#stroke)';
-	export let showIcon = false;
-	export let customIcon;
+	
+	let {
+		geojson,
+		color,
+		pane = $bindable(undefined),
+		fillColor = 'blue',
+		fillOpacity = 0.6,
+		weight = 2,
+		fitBounds = true,
+		addToFeatureGroup = false,
+		fitFeatureGroup = false,
+		featureGroups = [],
+		addFillPattern = false,
+		addStrokePattern = false,
+		patternUrl = 'url(#angledCrossLines)',
+		strokePatternUrl = 'url(#stroke)',
+		showIcon = false,
+		customIcon,
+		layer,
+		onClickLayer,
+		onMouseOver,
+		onMouseOut,
+		content,
+		
+	} = $props();
 	const container = getContext('layerGroup')();
 	const featureGroup = getContext('featureGroup')();
 
 	const addLayerTo = addToFeatureGroup && featureGroup ? featureGroup : container;
 
 	let layerPane = pane || getContext('pane');
-	// @ts-ignore
-	export let layer;
+	
 
 	const pointToLayer = (/** @type {any} */ feature, /** @type {any} */ latlng) => {
 		if (showIcon) {
@@ -42,9 +48,17 @@
 	};
 
 	layer = L.geoJSON(geojson, flush({ pane: layerPane, pointToLayer: pointToLayer }))
-		.on('mouseover', (/** @type {any} */ e) => dispatch('mouseover', e))
-		.on('mouseout', (/** @type {any} */ e) => dispatch('mouseout', e))
-		.on('click', (/** @type {any} */ e) => dispatch('click', e))
+	.on('mouseover', (e) => {
+		onMouseOver(e)
+	})
+	.on('mouseout', (e) => {
+		onMouseOut(e)
+		
+	})
+	.on('click', (e) => {
+		console.log("clicked",e)
+		onClickLayer(e)
+	})
 		.addTo(addLayerTo);
 
 	let bounds;
@@ -73,7 +87,6 @@
 	layer.setStyle(layerStyle);
 </script>
 
-<slot />
 
 <!-- SVG pattern definition with id -->
 <svg style="height: 0; width: 0; position: absolute;">
