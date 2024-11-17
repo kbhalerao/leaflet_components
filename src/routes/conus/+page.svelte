@@ -12,7 +12,11 @@
 	import { difference, featureCollection } from '@turf/turf';
 	import Geoman from '$lib/leaflet/Geoman.svelte';
 	import MapTiles from '$lib/leaflet/MapTiles.svelte';
+	import { PointAndPolygon } from '$lib/data/point_and_polygon.js';
+	import { createCustomDivIcon, svgIcons } from '$lib/leaflet/helpers.js';
 
+	let PointAndPolygonFeature = PointAndPolygon?.features;
+	let L;
 	let map;
 	let usstates = {
 		features: []
@@ -56,6 +60,7 @@
 	let defaultFeatureGroup;
 	let nationalFeatureGroup;
 	let stateFeatureGroup;
+	let pointAndPolygonFeatureGroup;
 	let addToFeatureGroup = true;
 	async function getCounties(state) {
 		if (state) {
@@ -70,6 +75,7 @@
 	$: getCounties(selectedState);
 
 	onMount(async () => {
+		L = await import('leaflet');
 		usstates = await fetch('/geojsons/gz_2010_us_040_00_500k.json?url').then((r) => r.json());
 	});
 
@@ -107,13 +113,14 @@
 			{#each usstates?.features?.slice(0, 20) as feature}
 				<GeoJson
 					geojson={feature}
-					fitBounds={false}
+					fitBounds={true}
 					fillOpacity={parseInt(feature.properties.STATE) / 100}
 					on:click={() => {}}
 					{addToFeatureGroup}
 					fitFeatureGroup={false}
 					addFillPattern={false}
 					addStrokePattern={true}
+					featureGroups={[nationalFeatureGroup, pointAndPolygonFeatureGroup]}
 				>
 					<!-- <ToolTip sticky={true}>
 					<ToolTipData />
@@ -140,6 +147,27 @@
 						<ToolTipData />
 					</ToolTip>
 				</GeoJson>
+			{/each}
+		</FeatureGroup>
+		<FeatureGroup bind:featureGroup={pointAndPolygonFeatureGroup}>
+			{#each PointAndPolygonFeature as PP}
+				<GeoJson
+					geojson={PP}
+					fitBounds={false}
+					showIcon={true}
+					{addToFeatureGroup}
+					customIcon={createCustomDivIcon(
+						L,
+						{
+							html: svgIcons['noun-grain-silo'],
+							className: 'noun-grain-silo',
+							iconSize: [32, 32], // Adjust size according to your icons
+							iconAnchor: [16, 32], // Set the anchor point to match your icon's layout
+							popupAnchor: [0, -32]
+						},
+						{}
+					)}
+				/>
 			{/each}
 		</FeatureGroup>
 		<Control position="topright">

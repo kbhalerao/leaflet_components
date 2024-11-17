@@ -1,6 +1,7 @@
 <script>
 	import flush from 'just-flush';
 	import { getContext, setContext, onDestroy, createEventDispatcher } from 'svelte';
+	import { getFeatureGroupsBounds } from './helpers.js';
 
 	const dispatch = createEventDispatcher();
 
@@ -13,11 +14,13 @@
 	export let fitBounds = true;
 	export let addToFeatureGroup = false;
 	export let fitFeatureGroup = false;
+	export let featureGroups = [];
 	export let addFillPattern = false;
 	export let addStrokePattern = false;
 	export let patternUrl = 'url(#angledCrossLines)';
 	export let strokePatternUrl = 'url(#stroke)';
-
+	export let showIcon = false;
+	export let customIcon;
 	const container = getContext('layerGroup')();
 	const featureGroup = getContext('featureGroup')();
 
@@ -27,7 +30,18 @@
 	// @ts-ignore
 	export let layer;
 
-	layer = L.geoJSON(geojson, flush({ pane: layerPane }))
+	const pointToLayer = (/** @type {any} */ feature, /** @type {any} */ latlng) => {
+		if (showIcon) {
+			if (customIcon) {
+				return L.marker(latlng, { icon: customIcon });
+			} else {
+				console.log('Inside PointToLayer', latlng);
+				return L.marker(latlng);
+			}
+		}
+	};
+
+	layer = L.geoJSON(geojson, flush({ pane: layerPane, pointToLayer: pointToLayer }))
 		.on('mouseover', (/** @type {any} */ e) => dispatch('mouseover', e))
 		.on('mouseout', (/** @type {any} */ e) => dispatch('mouseout', e))
 		.on('click', (/** @type {any} */ e) => dispatch('click', e))
@@ -35,6 +49,9 @@
 
 	let bounds;
 	bounds = fitFeatureGroup ? featureGroup?.getBounds() : layer.getBounds();
+	if (featureGroups?.length) {
+		bounds = getFeatureGroupsBounds(L, featureGroups);
+	}
 
 	if (fitBounds && bounds) {
 		container.fitBounds(bounds);
