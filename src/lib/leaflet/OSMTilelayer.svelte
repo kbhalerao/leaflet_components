@@ -1,5 +1,7 @@
 <script>
 	import { getContext } from 'svelte';
+	import { tileLayers } from './stores.js';
+	export let defaultTile = true;
 
 	const tile_data = {
 		name: 'osm',
@@ -19,6 +21,15 @@
 		let L = await import('leaflet');
 		let osmTile = L.tileLayer(tile_data.value.uri, tile_data.value.options).addTo(map);
 		layerControl?.addBaseLayer(osmTile, 'osm');
+		if (defaultTile) {
+			osmTile.addTo(map);
+		}
+		tileLayers.update((value) => {
+			return {
+				...value,
+				['osm']: osmTile
+			};
+		});
 	};
 </script>
 

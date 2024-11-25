@@ -3,7 +3,7 @@
 	import { difference, featureCollection } from '@turf/turf';
 	import { getContext, onMount } from 'svelte';
 
-	const geomanControls = {
+	export let geomanControls = {
 		drawMarker: false,
 		drawPolyline: false,
 		drawCircle: true,
