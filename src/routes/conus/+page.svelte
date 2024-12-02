@@ -104,19 +104,19 @@
 		console.log('The state features', stateFeatureGroup.toGeoJSON());
 	}
 
-	const onClickLayer = (e)=>{
-		// console.log("The layer clicked",e)
-	}
-	const onMouseOut = (e)=>{
-		// console.log("OnMouseOut",e)
-	}
-	const onMouseOver = (e)=>{
-		// console.log("OnMouseOver",e)
-	}
+	const onClickLayer = (e) => {
+		console.log('The layer clicked', e);
+	};
+	const onMouseOut = (e) => {
+		console.log('OnMouseOut', e);
+	};
+	const onMouseOver = (e) => {
+		console.log('OnMouseOver', e?.layer?.toGeoJSON());
+	};
 </script>
 
 <div class="conus">
-	<Leaflet bind:map={map} height={'600px'} geolocate={false}>
+	<Leaflet bind:map height={'600px'} geolocate={false}>
 		<Geoman {geomanControls} />
 		<MapTiles {mapTileList} {defaultTile} {PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
@@ -167,6 +167,9 @@
 					geojson={PP}
 					fitBounds={false}
 					showIcon={true}
+					{onClickLayer}
+					{onMouseOver}
+					{onMouseOut}
 					{addToFeatureGroup}
 					customIcon={createCustomDivIcon(
 						L,

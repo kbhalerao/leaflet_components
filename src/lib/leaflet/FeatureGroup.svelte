@@ -8,7 +8,7 @@
 		featureGroup = L.featureGroup().addTo(container);
 	});
 	featureGroup = L.featureGroup().addTo(container);
-	const get_feature_group = () => featureGroup;
+	export const get_feature_group = () => featureGroup;
 	setContext(contextName, get_feature_group);
 </script>
 

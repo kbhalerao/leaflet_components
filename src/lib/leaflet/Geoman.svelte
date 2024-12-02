@@ -3,21 +3,24 @@
 	import { difference, featureCollection } from '@turf/turf';
 	import { getContext, onMount } from 'svelte';
 
-	export let geomanControls = {
-		drawMarker: false,
-		drawPolyline: false,
-		drawCircle: true,
-		dragMode: true,
-		drawPolygon: true,
-		cutPolygon: true,
-		removalMode: true,
-		rotateMode: false,
-		pickPolygons: true,
-		editMode: true
-	};
+	let {
+		geomanControls = {
+			drawMarker: false,
+			drawPolyline: false,
+			drawCircle: true,
+			dragMode: true,
+			drawPolygon: true,
+			cutPolygon: true,
+			removalMode: true,
+			rotateMode: false,
+			pickPolygons: true,
+			editMode: true
+		}
+	} = $props();
 
 	const container = getContext('layerGroup')();
-	export let featureGroup = L.featureGroup().addTo(container);
+	let featureGroup = L.featureGroup().addTo(container);
+
 	onMount(async () => {
 		if (browser && container) {
 			const { setUpMapForEditEvents, add_map_boundary_draw_controls } = await import('./utils.js');
