@@ -1,11 +1,14 @@
 <script>
-	import { getContext, setContext } from 'svelte';
-
-	export let contextName = 'featureGroup';
+	import { getContext, onMount, setContext } from 'svelte';
 
 	const container = getContext('layerGroup')();
-	export let featureGroup = L.featureGroup().addTo(container);
-	export const get_feature_group = () => featureGroup;
+	let { contextName = 'featureGroup', featureGroup = $bindable() } = $props();
+
+	onMount(() => {
+		featureGroup = L.featureGroup().addTo(container);
+	});
+	featureGroup = L.featureGroup().addTo(container);
+	const get_feature_group = () => featureGroup;
 	setContext(contextName, get_feature_group);
 </script>
 
