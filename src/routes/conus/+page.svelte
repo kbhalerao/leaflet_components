@@ -80,6 +80,7 @@
 	});
 
 	function on_layer_edit(e) {
+		console.log('On layer edit', e);
 		const { layer, type, ...rest } = e.detail;
 		// This way we can edit the properties of the layer we edited
 		layer.feature.properties = { ...layer.feature.properties, text: 'Hello' };
@@ -105,14 +106,15 @@
 	}
 
 	const onClickLayer = (e) => {
-		console.log('The layer clicked', e);
+		// console.log('The layer clicked', e);
 	};
 	const onMouseOut = (e) => {
-		console.log('OnMouseOut', e);
+		// console.log('OnMouseOut', e);
 	};
 	const onMouseOver = (e) => {
-		console.log('OnMouseOver', e?.layer?.toGeoJSON());
+		// console.log('OnMouseOver', e?.layer?.toGeoJSON());
 	};
+	console.log('Hello, World!');
 </script>
 
 <div class="conus">
@@ -132,19 +134,19 @@
 					fitFeatureGroup={false}
 					addFillPattern={false}
 					addStrokePattern={true}
-					featureGroups={[nationalFeatureGroup, pointAndPolygonFeatureGroup]}
+					featureGroups={[nationalFeatureGroup]}
 				>
-					<!-- <ToolTip sticky={true}>
-					<ToolTipData />
-				</ToolTip> -->
+					<ToolTip sticky={true}>
+						<ToolTipData />
+					</ToolTip>
 					<ListenEdits on:pm:edit={on_layer_edit} on:pm:cut={on_layer_cut} />
-					<!-- <Popup>
+					<Popup>
 						<PopupData />
-					</Popup> -->
+					</Popup>
 				</GeoJson>
 			{/each}
 		</FeatureGroup>
-		<FeatureGroup bind:featureGroup={stateFeatureGroup}>
+		<!-- <FeatureGroup bind:featureGroup={stateFeatureGroup}>
 			{#each counties?.features as county (county.properties.FIPS)}
 				<GeoJson
 					geojson={county}
@@ -184,7 +186,7 @@
 					)}
 				/>
 			{/each}
-		</FeatureGroup>
+		</FeatureGroup> -->
 		<Control position="topright">
 			<button class="btn btn-sm btn-primary" type="button" on:click={on_save}>save</button>
 		</Control>

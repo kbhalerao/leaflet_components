@@ -3,7 +3,6 @@
 	import { getContext, setContext, onDestroy } from 'svelte';
 	import { getFeatureGroupsBounds } from './helpers.js';
 
-	
 	let {
 		geojson,
 		color,
@@ -25,8 +24,7 @@
 		onClickLayer,
 		onMouseOver,
 		onMouseOut,
-		content,
-		
+		content
 	} = $props();
 	const container = getContext('layerGroup')();
 	const featureGroup = getContext('featureGroup')();
@@ -34,7 +32,6 @@
 	const addLayerTo = addToFeatureGroup && featureGroup ? featureGroup : container;
 
 	let layerPane = pane || getContext('pane');
-	
 
 	const pointToLayer = (/** @type {any} */ feature, /** @type {any} */ latlng) => {
 		if (showIcon) {
@@ -48,17 +45,16 @@
 	};
 
 	layer = L.geoJSON(geojson, flush({ pane: layerPane, pointToLayer: pointToLayer }))
-	.on('mouseover', (e) => {
-		onMouseOver(e)
-	})
-	.on('mouseout', (e) => {
-		onMouseOut(e)
-		
-	})
-	.on('click', (e) => {
-		console.log("clicked",e)
-		onClickLayer(e)
-	})
+		.on('mouseover', (e) => {
+			onMouseOver(e);
+		})
+		.on('mouseout', (e) => {
+			onMouseOut(e);
+		})
+		.on('click', (e) => {
+			// console.log("clicked",e)
+			onClickLayer(e);
+		})
 		.addTo(addLayerTo);
 
 	let bounds;
@@ -86,7 +82,6 @@
 	let layerStyle = flush({ color, fillColor, fillOpacity, weight });
 	layer.setStyle(layerStyle);
 </script>
-
 
 <!-- SVG pattern definition with id -->
 <svg style="height: 0; width: 0; position: absolute;">
