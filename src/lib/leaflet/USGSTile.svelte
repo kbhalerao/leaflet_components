@@ -3,7 +3,8 @@
 
 	import { browser } from '$app/environment';
 	import { tileLayers } from './stores.js';
-	export let defaultTile = false;
+
+	let { defaultTile = false } = $props();
 
 	const tile_data = {
 		name: 'USGS',
@@ -38,6 +39,4 @@
 	};
 </script>
 
-<div use:addTileLayer>
-	<slot />
-</div>
+<div use:addTileLayer />

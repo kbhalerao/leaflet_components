@@ -2,9 +2,11 @@
 	import { getContext } from 'svelte';
 	import { tileLayers } from './stores.js';
 
-	export let mapbox_api_key = '';
-	export let defaultTile = false;
-	export let mapboxStyleID = 'mapbox/satellite-streets-v9';
+	let {
+		mapbox_api_key = '',
+		defaultTile = false,
+		mapboxStyleID = 'mapbox/satellite-streets-v9'
+	} = $props();
 
 	const tile_data = {
 		name: 'mapbox',
@@ -41,6 +43,4 @@
 	};
 </script>
 
-<div use:addTileLayer>
-	<slot />
-</div>
+<div use:addTileLayer />

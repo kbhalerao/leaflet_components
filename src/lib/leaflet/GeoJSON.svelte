@@ -24,10 +24,11 @@
 		onClickLayer,
 		onMouseOver,
 		onMouseOut,
-		content
+		content,
+		children,
 	} = $props();
-	const container = getContext('layerGroup')();
-	const featureGroup = getContext('featureGroup')();
+	 const container = getContext('layerGroup')();
+	 const featureGroup = getContext('featureGroup')();
 
 	const addLayerTo = addToFeatureGroup && featureGroup ? featureGroup : container;
 
@@ -82,7 +83,7 @@
 	let layerStyle = flush({ color, fillColor, fillOpacity, weight });
 	layer.setStyle(layerStyle);
 </script>
-
+{@render children()}
 <!-- SVG pattern definition with id -->
 <svg style="height: 0; width: 0; position: absolute;">
 	<defs>

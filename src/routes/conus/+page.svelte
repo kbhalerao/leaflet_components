@@ -81,7 +81,7 @@
 
 	function on_layer_edit(e) {
 		console.log('On layer edit', e);
-		const { layer, type, ...rest } = e.detail;
+		const { layer, type, ...rest } = e;
 		// This way we can edit the properties of the layer we edited
 		layer.feature.properties = { ...layer.feature.properties, text: 'Hello' };
 		if (layer) {
@@ -90,7 +90,7 @@
 	}
 
 	function on_layer_cut(e) {
-		const { layer, originalLayer, type, ...rest } = e.detail;
+		const { layer, originalLayer, type, ...rest } = e;
 
 		// This line is to retain the properties of the original layer
 		layer.feature.properties = { ...originalLayer.feature.properties };
@@ -102,7 +102,7 @@
 
 	function on_save() {
 		console.log('The national features', nationalFeatureGroup.toGeoJSON());
-		console.log('The state features', stateFeatureGroup.toGeoJSON());
+		// console.log('The state features', stateFeatureGroup.toGeoJSON());
 	}
 
 	const onClickLayer = (e) => {
@@ -118,7 +118,7 @@
 </script>
 
 <div class="conus">
-	<Leaflet bind:map height={'600px'} geolocate={false}>
+	<Leaflet bind:map height={'600px'} geolocate={false} useGeoman={true}>
 		<Geoman {geomanControls} />
 		<MapTiles {mapTileList} {defaultTile} {PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
@@ -139,7 +139,7 @@
 					<ToolTip sticky={true}>
 						<ToolTipData />
 					</ToolTip>
-					<ListenEdits on:pm:edit={on_layer_edit} on:pm:cut={on_layer_cut} />
+					<ListenEdits {on_layer_edit} {on_layer_cut} />
 					<Popup>
 						<PopupData />
 					</Popup>

@@ -3,20 +3,10 @@
 	/**
 	 * @type {undefined}
 	 */
-	let classNames = undefined;
+	let {classNames = undefined,position,control=undefined,children}=$props();
 	export { classNames as class };
 
-	/**
-	 * position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright'
-	 * @type {string}
-	 */
-	export let position;
-
-	/**
-	 * The control instance created by this component
-	 * @type {{ remove: () => void; } | undefined}
-	 */
-	export let control = undefined;
+	
 	const map = getContext('map')();
 
 	/**
@@ -38,7 +28,7 @@
 <div style="display:hidden">
 	<div use:createControl class={classNames}>
 		{#if control}
-			<slot {control} />
+			{@render children()}
 		{/if}
 	</div>
 </div>

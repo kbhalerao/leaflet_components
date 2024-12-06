@@ -1,5 +1,4 @@
 <script>
-	console.log('Inside tooltip data');
 </script>
 
 <div class="main-wrapper">

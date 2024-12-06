@@ -1,7 +1,8 @@
 <script>
 	import { getContext } from 'svelte';
 	import { tileLayers } from './stores.js';
-	export let defaultTile = true;
+
+	let { defaultTile = true } = $props();
 
 	const tile_data = {
 		name: 'osm',
@@ -33,6 +34,4 @@
 	};
 </script>
 
-<div use:addTileLayer>
-	<slot />
-</div>
+<div use:addTileLayer />

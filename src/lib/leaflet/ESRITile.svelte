@@ -1,9 +1,9 @@
 <script>
 	import { browser } from '$app/environment';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { tileLayers } from './stores.js';
 
-	export let defaultTile = false;
+	let { defaultTile = false } = $props();
 
 	const tile_data = {
 		name: 'ESRI',
@@ -39,6 +39,4 @@
 	};
 </script>
 
-<div use:addTileLayer>
-	<slot />
-</div>
+<div use:addTileLayer />

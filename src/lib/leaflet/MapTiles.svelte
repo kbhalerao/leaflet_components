@@ -6,17 +6,18 @@
 	import OsmTileLayer from './OSMTileLayer.svelte';
 	import UsgsTile from './USGSTile.svelte';
 
-	export let PUBLIC_MAPBOX_API_KEY = '';
-
-	export let mapTileList = {
-		google: false,
-		mapbox: false,
-		osm: true,
-		esri: false,
-		naip: false,
-		usgs: false
-	};
-	export let defaultTile = 'osm';
+	let {
+		PUBLIC_MAPBOX_API_KEY = '',
+		mapTileList = {
+			google: false,
+			mapbox: false,
+			osm: true,
+			esri: false,
+			naip: false,
+			usgs: false
+		},
+		defaultTile = 'osm'
+	} = $props();
 
 	const TileComponents = {
 		google: GoogleTile,

@@ -1,16 +1,10 @@
 <script>
 	import { getContext, setContext } from 'svelte';
-	/**
-	 * @type {string}
-	 */
-	let classNames = '';
-	export { classNames as class };
-	/**
-	 * @type {{ remove: () => void; } | undefined}
-	 */
-	export let popup = undefined;
-	let showContents = false;
-	let popupOpen = false;
+
+	
+	let {classNames,popup,children} = $props()
+	let showContents = $state(false);
+	let popupOpen = $state(false);
 	const layer = getContext('layer')();
 
 	/**
@@ -51,7 +45,7 @@
 <div class="hidden">
 	<div use:createPopup class={classNames}>
 		{#if showContents}
-			<slot />
+			{@render children()}
 		{/if}
 	</div>
 </div>

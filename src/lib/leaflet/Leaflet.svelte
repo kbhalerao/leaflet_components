@@ -13,14 +13,25 @@
 		geolocate = false,
 		zoomToLocation = false,
 		showTileLayerControl = true,
+		useGeoman = true,
 		map = $bindable(),
-	}:{height:string;bounds:any,view:number[];zoom:number;mapbusy:boolean;geolocate:boolean,zoomToLocation:boolean,showTileLayerControl:boolean;map:any} = $props();
-
-	
+		children,
+	}: {
+		height: string;
+		bounds: any;
+		view: number[];
+		zoom: number;
+		mapbusy: boolean;
+		geolocate: boolean;
+		zoomToLocation: boolean;
+		showTileLayerControl: boolean;
+		useGeoman: boolean;
+		map: any;
+		children:any;
+	} = $props();
 
 	export const invalidateSize = () => map?.invalidateSize();
 
-	
 	let layerControl;
 
 	/**
@@ -59,7 +70,7 @@
 	 */
 	async function createLeaflet(node) {
 		let L = await import('leaflet');
-		await import('@geoman-io/leaflet-geoman-free');
+		if (useGeoman) await import('@geoman-io/leaflet-geoman-free');
 
 		map = L.map(node, {
 			attributionControl: false
@@ -73,7 +84,6 @@
 			layerControl = L.control.layers().addTo(map);
 		}
 
-
 		spinner = new Spinner().spin(node);
 		return {
 			destroy() {
@@ -83,31 +93,27 @@
 		};
 	}
 
-	$effect(()=>{
+	$effect(() => {
 		if (map) {
-		if (bounds) {
-			map.fitBounds(bounds);
-		} else {
-			map.setView(view, zoom);
+			if (bounds) {
+				map.fitBounds(bounds);
+			} else {
+				map.setView(view, zoom);
+			}
 		}
-	}
-	}) 
+	});
 
-	$effect(()=>{
+	$effect(() => {
 		if (map && spinner) {
-		if (mapbusy) {
-			spinner.spin();
-		} else {
-			spinner.stop();
+			if (mapbusy) {
+				spinner.spin();
+			} else {
+				spinner.stop();
+			}
 		}
-	}
-	})
+	});
 
-	
-
-	
-
-	$effect(async()=>{
+	$effect(async () => {
 		if (map && geolocate && coords) {
 			let { showLocation } = await import('./utils');
 			showLocation(coords, map, zoom);
@@ -115,12 +121,12 @@
 				map.flyTo([coords.latitude, coords.longitude]);
 			}
 		}
-	})
+	});
 </script>
 
 <div style="height: {height};" use:createLeaflet>
 	{#if map}
-		<slot {map} />
+		{@render children()}
 	{/if}
 	{#if geolocate}
 		<Geolocation
@@ -131,7 +137,6 @@
 		/>
 	{/if}
 </div>
-
 
 <style>
 	@import 'leaflet/dist/leaflet.css';
