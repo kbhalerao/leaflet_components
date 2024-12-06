@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	import { tileLayers } from './stores.js';
 
-	let { defaultTile = true } = $props();
+	let { defaultTile = false } = $props();
 
 	const tile_data = {
 		name: 'osm',

@@ -19,20 +19,44 @@
 		defaultTile = 'osm'
 	} = $props();
 
+
+	
 	const TileComponents = {
-		google: GoogleTile,
-		mapbox: MapBoxTileLayer,
-		osm: OsmTileLayer,
-		esri: EsriTile,
-		naip: NaipTile,
-		usgs: UsgsTile
+		google: google,
+		mapbox: mapbox,
+		osm: osm,
+		esri: esri,
+		naip: naip,
+		usgs: usgs
 	};
 </script>
 
+{#snippet google(defaultTile)}
+	<GoogleTile {defaultTile}/>
+{/snippet}
+
+{#snippet mapbox(defaultTile,mapbox_api_key)}
+	<MapBoxTileLayer {defaultTile} {mapbox_api_key}/>
+{/snippet}
+
+{#snippet osm(defaultTile)}
+	<OsmTileLayer {defaultTile}/>
+{/snippet}
+
+{#snippet esri(defaultTile)}
+	<EsriTile {defaultTile}/>
+{/snippet}
+{#snippet naip(defaultTile)}
+	<NaipTile {defaultTile}/>
+{/snippet}
+
+{#snippet usgs(defaultTile)}
+	<UsgsTile {defaultTile}/>
+{/snippet}
 {#each Object.keys(mapTileList) as tile}
 	{#if mapTileList[tile]}
 		{@const defaultTileLayer = defaultTile == tile ? true : false}
 		{@const mapbox_api_key = PUBLIC_MAPBOX_API_KEY ? PUBLIC_MAPBOX_API_KEY : ''}
-		<svelte:component this={TileComponents[tile]} defaultTile={defaultTileLayer} {mapbox_api_key} />
+		 {@render TileComponents?.[tile](defaultTileLayer,mapbox_api_key)}
 	{/if}
 {/each}
