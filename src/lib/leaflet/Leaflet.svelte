@@ -3,6 +3,11 @@
 	import { Spinner } from 'spin.js';
 	import Geolocation from 'svelte-geolocation';
 
+
+	
+
+	
+
 	// Destructuring props with defaults
 	let {
 		height = '300px',
@@ -12,7 +17,16 @@
 		mapbusy = false,
 		geolocate = false,
 		zoomToLocation = false,
+		scrollWheelZoom=true,
+		dragging=true,
+		zoomControl=true,
+		addScale=true,
+		scalePosition = 'bottomright',
+		zoomControlPosition='',
+		backgroundWhite=false,
 		showTileLayerControl = true,
+		fullscreenControl=true,
+		fullScreenPluginPosition='topright',
 		useGeoman = true,
 		map = $bindable(),
 		children,
@@ -24,7 +38,16 @@
 		mapbusy: boolean;
 		geolocate: boolean;
 		zoomToLocation: boolean;
+		scrollWheelZoom:boolean;
+		dragging: boolean;
+		zoomControl: boolean;
+		addScale: boolean;
+		scalePosition: string;
+		zoomControlPosition: string;
 		showTileLayerControl: boolean;
+		backgroundWhite:boolean;
+		fullscreenControl:boolean,
+		fullScreenPluginPosition:string;
 		useGeoman: boolean;
 		map: any;
 		children:any;
@@ -73,12 +96,33 @@
 		if (useGeoman)
 		{
 			await import('@geoman-io/leaflet-geoman-free');
-			
 		}
+		await import('leaflet.fullscreen');
 
 		map = L.map(node, {
-			attributionControl: false
+			zoomSnap: 0.25,
+			zoomDelta: 0.25,
+			attributionControl: false,
+			scrollWheelZoom,
+			dragging,
+			zoomControl,
+			preferCanvas: false,
+			fullscreenControl,
+			fullscreenControlOptions: {
+				position: fullScreenPluginPosition
+			}
 		});
+
+		if (zoomControlPosition) {
+			L.control
+				.zoom({
+					position: zoomControlPosition
+				})
+				.addTo(map);
+		}
+
+		if (addScale) L.control.scale({ position: scalePosition, imperial: true }).addTo(map);
+
 		if (bounds) {
 			map.fitBounds(bounds);
 		} else {
@@ -136,7 +180,7 @@
 	/>
 </svelte:head>
 
-<div style="height: {height};" use:createLeaflet>
+<div style="height: {height};" use:createLeaflet class:background-border={backgroundWhite}>
 	{#if map}
 		{@render children()}
 	{/if}
@@ -153,6 +197,8 @@
 <style>
 	@import 'leaflet/dist/leaflet.css';
 	@import 'spin.js/spin.css';
+	@import 'leaflet.fullscreen/Control.FullScreen.css';
+
 	:global(.leaflet-control-container) {
 		position: static;
 	}
@@ -174,5 +220,9 @@
 		100% {
 			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 		}
+	}
+
+	.background-border {
+		background-color: white;
 	}
 </style>

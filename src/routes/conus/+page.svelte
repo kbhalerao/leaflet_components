@@ -62,6 +62,20 @@
 	let stateFeatureGroup;
 	let pointAndPolygonFeatureGroup;
 	let addToFeatureGroup = true;
+
+	let geolocate = true;
+	let useGeoman = true;
+	let zoomToLocation = true;
+	let scrollWheelZoom = true;
+	let dragging = true;
+	let zoomControl = false;
+	let addScale = true;
+	let scalePosition = 'bottomright';
+	let zoomControlPosition = 'topright';
+	let backgroundWhite = true;
+	let showTileLayerControl = false;
+	let fullscreenControl = true;
+	let fullScreenPluginPosition = 'topleft';
 	async function getCounties(state) {
 		if (state) {
 			counties = await fetch(`/geojsons/${state}.json`).then((r) => r.json());
@@ -118,7 +132,23 @@
 </script>
 
 <div class="conus">
-	<Leaflet bind:map height={'600px'} geolocate={true} useGeoman={true}>
+	<Leaflet
+		bind:map
+		height={'600px'}
+		{geolocate}
+		{useGeoman}
+		{fullscreenControl}
+		{fullScreenPluginPosition}
+		{zoomControlPosition}
+		{zoomControl}
+		{showTileLayerControl}
+		{addScale}
+		{scalePosition}
+		{scrollWheelZoom}
+		{zoomToLocation}
+		{dragging}
+		{backgroundWhite}
+	>
 		<Geoman {geomanControls} />
 		<MapTiles {mapTileList} {defaultTile} {PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>
