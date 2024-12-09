@@ -1,7 +1,5 @@
 <script>
 	import { getContext } from 'svelte';
-
-	import { browser } from '$app/environment';
 	import { tileLayers } from './stores.js';
 
 	let { defaultTile = false } = $props();
@@ -22,9 +20,8 @@
 	const layerControl = getContext('layerControl')();
 
 	const addTileLayer = async () => {
-		if (browser) {
-			L = await import('leaflet');
-		}
+		let L = await import('leaflet');
+
 		let naipTile = L.tileLayer(tile_data.value.uri, tile_data.value.options);
 		if (defaultTile) {
 			naipTile.addTo(map);

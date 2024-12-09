@@ -2,7 +2,7 @@
 	import { getContext, onMount, setContext } from 'svelte';
 
 	const container = getContext('layerGroup')();
-	let { contextName = 'featureGroup', featureGroup = $bindable() } = $props();
+	let { contextName = 'featureGroup', featureGroup = $bindable(),children } = $props();
 
 	onMount(() => {
 		featureGroup = L.featureGroup().addTo(container);
@@ -12,14 +12,9 @@
 	setContext(contextName, get_feature_group);
 </script>
 
-<svelte:head>
-	<link
-		rel="stylesheet"
-		href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css"
-	/>
-</svelte:head>
 
-<slot />
+
+{@render children()}
 
 <style>
 </style>

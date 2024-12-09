@@ -54,7 +54,7 @@
 	<UsgsTile {defaultTile}/>
 {/snippet}
 {#each Object.keys(mapTileList) as tile}
-	{#if mapTileList[tile]}
+	{#if mapTileList[tile] == true}
 		{@const defaultTileLayer = defaultTile == tile ? true : false}
 		{@const mapbox_api_key = PUBLIC_MAPBOX_API_KEY ? PUBLIC_MAPBOX_API_KEY : ''}
 		 {@render TileComponents?.[tile](defaultTileLayer,mapbox_api_key)}

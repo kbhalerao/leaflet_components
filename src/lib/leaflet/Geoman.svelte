@@ -22,7 +22,8 @@
 	let featureGroup = L.featureGroup().addTo(container);
 
 	onMount(async () => {
-		if (browser && container) {
+		await import('@geoman-io/leaflet-geoman-free');
+		if (container) {
 			const { setUpMapForEditEvents, add_map_boundary_draw_controls } = await import('./utils.js');
 			add_map_boundary_draw_controls(container, geomanControls, 'topright');
 			setUpMapForEditEvents(featureGroup, container);

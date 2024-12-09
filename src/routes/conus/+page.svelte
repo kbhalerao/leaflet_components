@@ -118,7 +118,7 @@
 </script>
 
 <div class="conus">
-	<Leaflet bind:map height={'600px'} geolocate={false} useGeoman={true}>
+	<Leaflet bind:map height={'600px'} geolocate={true} useGeoman={true}>
 		<Geoman {geomanControls} />
 		<MapTiles {mapTileList} {defaultTile} {PUBLIC_MAPBOX_API_KEY} />
 		<FeatureGroup bind:featureGroup={nationalFeatureGroup}>

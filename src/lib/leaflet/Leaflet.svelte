@@ -70,7 +70,11 @@
 	 */
 	async function createLeaflet(node) {
 		let L = await import('leaflet');
-		if (useGeoman) await import('@geoman-io/leaflet-geoman-free');
+		if (useGeoman)
+		{
+			await import('@geoman-io/leaflet-geoman-free');
+			
+		}
 
 		map = L.map(node, {
 			attributionControl: false
@@ -115,7 +119,7 @@
 
 	$effect(async () => {
 		if (map && geolocate && coords) {
-			let { showLocation } = await import('./utils');
+			let { showLocation } = await import('./utils.js');
 			showLocation(coords, map, zoom);
 			if (zoomToLocation) {
 				map.flyTo([coords.latitude, coords.longitude]);
@@ -123,6 +127,14 @@
 		}
 	});
 </script>
+
+<svelte:head>
+
+	<link
+		rel="stylesheet"
+		href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css"
+	/>
+</svelte:head>
 
 <div style="height: {height};" use:createLeaflet>
 	{#if map}

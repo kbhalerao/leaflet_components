@@ -1,5 +1,4 @@
 <script>
-	import { browser } from '$app/environment';
 	import { getContext } from 'svelte';
 	import { tileLayers } from './stores.js';
 
@@ -22,9 +21,7 @@
 	const layerControl = getContext('layerControl')();
 
 	const addTileLayer = async () => {
-		if (browser) {
-			L = await import('leaflet');
-		}
+		let L = await import('leaflet');
 		let esriTile = L.tileLayer(tile_data.value.uri, tile_data.value.options);
 		layerControl?.addBaseLayer(esriTile, 'ESRI');
 		if (defaultTile) {
