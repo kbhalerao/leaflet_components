@@ -2,15 +2,21 @@
 	import { getContext, setContext } from 'svelte';
 
 	
-	let {classNames,tooltip,sticky,children}= $props()
+	let {classNames,tooltip,sticky=false,children,permanent=false,direction='center'}= $props()
 	let showContents = $state(false);
 	let tooltipOpen = $state(false);
+
+	if(permanent){
+		showContents=true;
+	}
 
 	const layer = getContext('layer')();
 	async function createTooltip(tooltipElement) {
 		let L = await import('leaflet');
 		tooltip = L.tooltip({
-			sticky
+			direction,
+			sticky,
+			permanent,
 		}).setContent(tooltipElement);
 		layer.bindTooltip(tooltip);
 		layer.on('tooltipopen', () => {
